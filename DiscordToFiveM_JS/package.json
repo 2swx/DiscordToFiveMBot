@@ -1,0 +1,15 @@
+{
+  "name": "discord-to-fivem-bot",
+  "version": "1.0.0",
+  "description": "Sends Discord messages to FiveM",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "FlatracerMOD",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^11.3.0",
+    "xmlhttprequest": "^1.8.0"
+  }
+}
