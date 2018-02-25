@@ -1,3 +1,4 @@
+-- Registers a HTTP request and handles it
 SetHttpHandler(function(req, res)
 	local Value = 'Bad Request'
 	local path = URLEncode(req.path)
@@ -43,6 +44,7 @@ SetHttpHandler(function(req, res)
 	res.send(json.encode(Value))
 end)
 
+-- Function to Encode URL Coding
 function URLEncode(String)
 	String = string.gsub(String, "+", " ")
 	String = string.gsub(String, "%%(%x%x)", function(H)
@@ -50,4 +52,31 @@ function URLEncode(String)
 	end)
 	return String
 end
+
+-- Version Checking down here, better don't touch this
+local CurrentVersion = '1.0.0'
+local GithubResourceName = 'DiscordToFiveMBot'
+
+PerformHttpRequest('https://raw.githubusercontent.com/Flatracer/FiveM_Resources/master/' .. GithubResourceName .. '/VERSION', function(Error, NewestVersion, Header)
+	PerformHttpRequest('https://raw.githubusercontent.com/Flatracer/FiveM_Resources/master/' .. GithubResourceName .. '/CHANGES', function(Error, Changes, Header)
+		print('\n')
+		print('##############')
+		print('## ' .. GithubResourceName)
+		print('##')
+		print('## Current Version: ' .. CurrentVersion)
+		print('## Newest Version: ' .. NewestVersion)
+		print('##')
+		if CurrentVersion ~= NewestVersion then
+			print('## Outdated')
+			print('## Check the Topic')
+			print('## For the newest Version!')
+			print('##############')
+			print('CHANGES: ' .. Changes)
+		else
+			print('## Up to date!')
+			print('##############')
+		end
+		print('\n')
+	end)
+end)
 
