@@ -54,7 +54,7 @@ function URLEncode(String)
 end
 
 -- Version Checking down here, better don't touch this
-local CurrentVersion = '1.0.0'
+local CurrentVersion = '1.0.1'
 local GithubResourceName = 'DiscordToFiveMBot'
 
 PerformHttpRequest('https://raw.githubusercontent.com/Flatracer/FiveM_Resources/master/' .. GithubResourceName .. '/VERSION', function(Error, NewestVersion, Header)
