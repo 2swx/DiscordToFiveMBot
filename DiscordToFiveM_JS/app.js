@@ -58,7 +58,8 @@ client.on("message", async message => {
 							var data = request.responseText;
 							var data = data.replace("[", "");
 							var data = data.replace("]", "");
-							if (typeof data !== 'undefined' && data.length > 0) {
+							console.log(data)
+							if (typeof data !== 'undefined' && data.length > 0 && data !== '"Nothing"') {
 								var data = data.replace(/\u0022/g, "");
 								var data = data.replace(/,/g, "\n");
 								message.channel.send("These are the connected Clients:\n" + data);

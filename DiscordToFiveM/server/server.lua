@@ -2,13 +2,13 @@
 SetHttpHandler(function(req, res)
 	local Value = 'Bad Request'
 	local path = URLEncode(req.path)
-	if path:sub(2, GetConvar('DTF_Password'):len()) == GetConvar('DTF_Password') then
-		path = path:sub(GetConvar('DTF_Password'):len() + 1)
+	if path:sub(2, GetConvar('DTF_Password'):len() + 1) == GetConvar('DTF_Password') then
+		path = path:sub(GetConvar('DTF_Password'):len() + 2)
 	end
 	
 	if req.method == 'GET' then
 		if path == '/getclients' then
-			Value = nil
+			Value = 'Nothing'
 			local clientList = {}
 
 			for _, ID in ipairs(GetPlayers()) do
