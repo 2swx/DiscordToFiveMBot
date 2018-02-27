@@ -2,6 +2,7 @@ const Discord = require("discord.js");
 const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 const client = new Discord.Client();
 const config = require("./config.json");
+const lang = require("./lang.json");
 client.on("ready", () => {
   console.log(`Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`); 
   client.user.setActivity(`Discord To FiveM`);
@@ -22,35 +23,57 @@ client.on("message", async message => {
 
 	const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
 	const command = args.shift().toLowerCase();
-
+	
 	if(command === "cmdlist") {
-		message.channel.send("Command List:\n`" + config.prefix + "cmdlist` - Shows a list of commands\n\n`" + config.prefix + "send [MESSAGE]` - Sends a chat message to the FiveM server\n\n`" + config.prefix + "getclients` - Gets the connected clients of the FiveM Server\n\n`" + config.prefix + "kick [SERVERID] [REASON]` - Kicks a client from the FiveM server");
+		message.channel.send("" + lang.CommandList + ":\n`" + config.prefix + "cmdlist` - " + lang.cmdlistDesc + "\n\n`" + config.prefix + "chkcon` - " + lang.chkconDesc + "\n\n`" + config.prefix + "send [MESSAGE]` - " + lang.sendDesc + "\n\n`" + config.prefix + "getclients` - " + lang.getclientsDesc + "\n\n`" + config.prefix + "kick [" + lang.SERVERID + "] [" + lang.REASON + "]` - " + lang.kickDesc + "\n\n`" + config.prefix + "ban [" + lang.SERVERID + "] [" + lang.REASON + "]` - " + lang.banDesc + "");
+	} else if (command === "chkcon") {
+		var request = new XMLHttpRequest();
+
+		request.onload = function () {
+			var status = request.status;
+			var data = request.responseText;
+			if (data === '"Connection successfull"') {
+				message.channel.send(lang.chkconSuccessful);
+			} else {
+				message.channel.send(lang.chkconUnsuccessful);
+			}
+		}
+
+		request.open("GET", "http://" + config.ip + ":" + config.port + "/DiscordToFiveM/" + config.password + "/chkcon", true);
+
+		request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+		request.send();
 	} else {
 		if(config.password.length > 0) {
 			if(config.ip.length > 0) {
 				if(config.port.length > 0) {
 					if(command === "send") {
 						var TheMessage = args.join(" ");
-						var request = new XMLHttpRequest();
+						if (TheMessage.length > 0) {
+							var request = new XMLHttpRequest();
 
-						request.onload = function () {
-							var status = request.status;
-							var data = request.responseText;
-							if (data === '"Successful"') {
-								message.reply("Message sent to FiveM!");
-							} else {
-								message.reply("ERROR!\nCouldn't send the message to FiveM");
+							request.onload = function () {
+								var status = request.status;
+								var data = request.responseText;
+								if (data === '"Successful"') {
+									message.reply(lang.sendMessageSent);
+								} else if (data === '"Message invalid"'){
+									message.reply(lang.sendErrorMessage);
+								} else {
+									message.reply(lang.sendError);
+								}
 							}
+
+							request.open("GET", "http://" + config.ip + ":" + config.port + "/DiscordToFiveM/" + config.password + "/sendmessage?SENDER=" + config.sender + "MESSAGE=" + TheMessage, true);
+
+							request.setRequestHeader("Content-type", "application/json");
+							
+							request.send();
+						} else {
+							message.reply("Please enter a message");
 						}
-
-						request.open("GET", "http://" + config.ip + ":" + config.port + "/DiscordToFiveM/" + config.password + "/sendmessage?MESSAGE=" + TheMessage, true);
-
-						request.setRequestHeader("Content-type", "application/json");
-						
-						request.send();
-					}
-				  
-					if(command === "getclients") {
+					} else if(command === "getclients") {
 						var request = new XMLHttpRequest();
 
 						request.onload = function () {
@@ -58,13 +81,12 @@ client.on("message", async message => {
 							var data = request.responseText;
 							var data = data.replace("[", "");
 							var data = data.replace("]", "");
-							console.log(data)
 							if (typeof data !== 'undefined' && data.length > 0 && data !== '"Nothing"') {
 								var data = data.replace(/\u0022/g, "");
 								var data = data.replace(/,/g, "\n");
-								message.channel.send("These are the connected Clients:\n" + data);
+								message.channel.send(lang.getclientsConnectedClients + ":\n" + data);
 							} else {
-								message.channel.send("Seems like there are no clients... ¯\\_(ツ)_/¯");
+								message.channel.send(lang.getclientsNoClients + " ¯\\_(ツ)_/¯");
 							}
 						}
 
@@ -73,50 +95,79 @@ client.on("message", async message => {
 						request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
 						request.send();
-					}
-				  
-					if(command === "kick") {
-								var ServerID = parseInt(args[0], 10);
-								var request = new XMLHttpRequest();
+					} else if(command === "kick") {
+						var ServerID = parseInt(args[0], 10);
+						var request = new XMLHttpRequest();
 
-								request.onload = function () {
-									var status = request.status;
-									var data = request.responseText;
-									if (data === '"Kicked"') {
-										message.reply("Done! The Client got kicked!");
-									} else {
-										message.reply("Hmm, seems like there is no Client with this ID...");
-									}
-								}
-
-								if (ServerID) {
-									args.splice(0, 1);
-									var TheMessage = args.join(" ");
-
-									if (TheMessage.length > 0) {
-										request.open("GET", "http://" + config.ip + ":" + config.port + "/DiscordToFiveM/" + config.password + "/kick?SERVERID=" + ServerID + "REASON=" + TheMessage, true);
-
-										request.setRequestHeader("Content-type", "application/json");
-										
-										request.send();
-									} else {
-										message.reply("Please add a Reason after the Server ID");
-									}
-								} else {
-									message.reply("Please enter a Server ID");
-								}
+						request.onload = function () {
+							var status = request.status;
+							var data = request.responseText;
+							if (data === '"Kicked"') {
+								message.reply(lang.kickKicked);
+							} else {
+								message.reply(lang.kickbanElse);
 							}
+						}
+
+						if (ServerID) {
+							args.splice(0, 1);
+							var TheMessage = args.join(" ");
+
+							if (TheMessage.length > 0 && TheMessage !== "[MESSAGE]") {
+								request.open("GET", "http://" + config.ip + ":" + config.port + "/DiscordToFiveM/" + config.password + "/kick?SERVERID=" + ServerID + "REASON=" + TheMessage, true);
+
+								request.setRequestHeader("Content-type", "application/json");
+								
+								request.send();
+							} else {
+								message.reply(lang.kickbanNoReason);
+							}
+						} else {
+							message.reply(lang.kickbanNoServerID);
+						}
+					} else if(command === "ban") {
+						var ServerID = parseInt(args[0], 10);
+						var request = new XMLHttpRequest();
+
+						request.onload = function () {
+							var status = request.status;
+							var data = request.responseText;
+							if (data === '"Banned"') {
+								message.reply(lang.banBanned);
+							} else {
+								message.reply(lang.kickbanElse);
+							}
+						}
+
+						if (ServerID) {
+							args.splice(0, 1);
+							var TheMessage = args.join(" ");
+
+							if (TheMessage.length > 0) {
+								request.open("GET", "http://" + config.ip + ":" + config.port + "/DiscordToFiveM/" + config.password + "/ban?SERVERID=" + ServerID + "REASON=" + TheMessage, true);
+
+								request.setRequestHeader("Content-type", "application/json");
+								
+								request.send();
+							} else {
+								message.reply(lang.kickbanNoReason);
+							}
+						} else {
+							message.reply(lang.kickbanNoServerID);
+						}
+					}
 				} else {
-					message.channel.send("Please configure the port");
+					message.channel.send(lang.NoPort);
 				}
 			} else {
-				message.channel.send("Please configure the IP");
+				message.channel.send(lang.NoIP);
 			}
 		} else {
-			message.channel.send("Please configure the password");
+			message.channel.send(lang.NoPassword);
 		}
 	}
 	message.delete().catch(O_o=>{}); 
 });
 
 client.login(config.token);
+
