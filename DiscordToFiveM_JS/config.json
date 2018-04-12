@@ -1,8 +1,4 @@
 {
 	"token"  : "YOUR_TOKEN_HERE",
-	"prefix"  : "!!",
-	"ip"  : "YOUR_IP_HERE",
-	"port"  : "YOUR_PORT_HERE",
-	"password"  : "YOUR_PASSWORD_HERE",
-	"sender"  : "ANY_NAME_HERE"
+	"prefix"  : "!!"
 }

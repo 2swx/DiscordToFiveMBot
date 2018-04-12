@@ -1,85 +1,86 @@
+	local IdentifiersUsed = {'license', 'steam'}
+
 -- Registers a HTTP request and handles it
 SetHttpHandler(function(req, res)
 	local Value = 'Bad Request'
-	local path = URLEncode(req.path)
-	if path:sub(2, GetConvar('DTF_Password'):len() + 1) == GetConvar('DTF_Password') then
+	local path = URLEncode(req.path):sub(2)
+	if path:sub(1, GetConvar('DTF_Password'):len()) == GetConvar('DTF_Password') then
 		path = path:sub(GetConvar('DTF_Password'):len() + 2)
-	end
-	
-	if req.method == 'GET' then
-		if path == '/chkcon' then
-			Value = 'Connection successfull'
-		elseif path == '/getclients' then
-			Value = 'Nothing'
-			local clientList = {}
+		local Sender = path:sub(1, path:find('/') - 1)
+		path = path:sub(Sender:len() + 2)
 
-			for _, ID in ipairs(GetPlayers()) do
-				table.insert(clientList, 'Name: ' .. GetPlayerName(ID) .. ' - ServerID: ' .. ID)
-			end
-			
-			if #clientList > 0 then
-				Value = clientList
-			end
-		elseif path:sub(1, 12) == '/sendmessage' then
-			local path = path:sub(21)
-			local MessageBegin, MessageEnd = path:find('MESSAGE=')
-			local Sender = path:sub(1, MessageBegin - 1)
-			local Message = path:sub(MessageEnd + 1)
-			if Message == '[MESSAGE]' then
-				Value = 'Message invalid'
-			else
+		if req.method == 'GET' then
+			if path == 'chkcon' then
+				Value = 'Connection successfull'
+			elseif path == 'getclients' then
+				Value = 'Nothing'
+				local Clients = ""
+
+				for _, ID in ipairs(GetPlayers()) do
+					if tonumber(ID) < 10 then
+						ID = '0' .. tostring(ID)
+					end
+					Clients = Clients .. ID .. '   |   ' .. GetPlayerName(ID) .. ';'
+				end
+
+				if Clients:len() > 0 then
+					Value = Clients
+				end
+			elseif path:sub(1, 4) == 'send' then
+				local Message = path:sub(6)
 				if UsingDiscordBot then
 					TriggerEvent('DiscordBot:ToDiscord', 'Chat', Sender, Message, '', true)
 				end
 				TriggerClientEvent('chatMessage', -1, Sender, {222, 199, 132}, Message)
-				Value = 'Successful'
-			end
-		elseif path:sub(1, 5) == '/kick' then
-			Value = nil
-			path = path:sub(7)
-			local ReasonBegin, ReasonEnd = path:find("REASON=")
-			local ServerID = tonumber(path:sub(10, ReasonBegin - 1))
-			local Reason = path:sub(ReasonEnd + 1)
-			local Name = GetPlayerName(ServerID)
-			if Name then
-				DropPlayer(ServerID, 'Reason: ' .. Reason)
-				print('>> Kicked ' .. Name .. '\n>> Reason: ' .. Reason)
-				if SendKickToChat then
-					TriggerClientEvent('chatMessage', -1, 'DiscordToFiveM', {222, 199, 132}, 'Kicked ' .. Name .. '\nReason: ' .. Reason)
+				Value = 'Sent'
+			elseif path:sub(1, 4) == 'kick' then
+				Value = nil
+				path = path:sub(6)
+				local ServerID = tonumber(path:sub(1, 2))
+				local Reason = path:sub(4)
+				local Name = GetPlayerName(ServerID)
+				if Name then
+					DropPlayer(ServerID, 'Kicked! Reason: ' .. Reason)
+					print('>> ' .. Lang.Kicked .. ' ' .. Name .. '\n>> ' .. Lang.Reason .. ': ' .. Reason)
+					if SendKickToChat then
+						TriggerClientEvent('chatMessage', -1, 'DiscordToFiveM', {222, 199, 132}, Lang.Kicked .. ' ' .. Name .. '\n' .. Lang.Reason .. ': ' .. Reason)
+					end
+					if UsingDiscordBot then
+						TriggerEvent('DiscordBot:ToDiscord', 'Chat', 'DiscordToFiveM', Lang.Kicked .. ' ' .. Name .. '\n' .. Lang.Reason .. ': ' .. Reason, '', true)
+					end
+					Value = 'Kicked ' .. Name
 				end
-				if UsingDiscordBot then
-					TriggerEvent('DiscordBot:ToDiscord', 'Chat', 'DiscordToFiveM', 'Kicked ' .. Name .. '\nReason: ' .. Reason, '', true)
+			elseif path:sub(1, 3) == 'ban' then
+				Value = nil
+				path = path:sub(5)
+				local ServerID = tonumber(path:sub(1, 2))
+				local Reason = path:sub(4)
+				local Name = GetPlayerName(ServerID):gsub(';', ',')
+				if Name then
+					local UTC = os.time(os.date('*t'))
+					for i, IdentifierUsed in ipairs(IdentifiersUsed) do
+						local ID = GetIDFromSource(IdentifierUsed, ServerID)
+						if ID ~= nil then
+							local Content = DTF_Load('BannedPlayer', IdentifierUsed:upper() .. '.txt')
+							DTF_Save('BannedPlayer', IdentifierUsed:upper() .. '.txt', Content .. Name .. ';' .. ID .. ';' .. tostring(UTC) .. ';' .. Reason .. ';' .. BanDuration .. '\n')
+						end
+					end
+					DropPlayer(ServerID, 'Banned! Reason: ' .. Reason)
+					local Dur
+					if BanDuration == 0 then
+						Dur = Lang.Forever
+					else
+						Dur = BanDuration .. ' ' .. Lang.Hours
+					end
+					print('>> ' .. Lang.Banned .. ' ' .. Name .. '\n>> ' .. Lang.Reason .. ': ' .. Reason .. '\n>> ' ..  Lang.Duration .. ': ' .. Dur)
+					if SendBanToChat then
+						TriggerClientEvent('chatMessage', -1, 'DiscordToFiveM', {222, 199, 132}, Lang.Banned .. ' ' .. Name .. '\n' .. Lang.Reason .. ': ' .. Reason .. '\n' ..  Lang.Duration .. ': ' .. Dur)
+					end
+					if UsingDiscordBot then
+						TriggerEvent('DiscordBot:ToDiscord', 'Chat', 'DiscordToFiveM', Lang.Banned .. ' ' .. Name .. '\n' .. Lang.Reason .. ': ' .. Reason .. '\n' ..  Lang.Duration .. ': ' .. Dur, '', true)
+					end
+					Value = 'Banned ' .. BanDuration .. ' ' .. Name
 				end
-				Value = 'Kicked'
-			end
-		elseif path:sub(1, 4) == '/ban' then
-			Value = nil
-			path = path:sub(6)
-			local ReasonBegin, ReasonEnd = path:find("REASON=")
-			local ServerID = tonumber(path:sub(10, ReasonBegin - 1))
-			local Reason = path:sub(ReasonEnd + 1):gsub(';', ',')
-			local Name = GetPlayerName(ServerID):gsub(';', ',')
-			if Name then
-				local UTC = os.time(os.date('*t'))
-				local IDLicense = GetIDFromSource('license', ServerID)
-				local IDSteam = GetIDFromSource('steam', ServerID)
-				if IDLicense ~= nil then
-					local Content = DTF_Load('BannedPlayer', 'LICENSE.txt')
-					DTF_Save('BannedPlayer', 'LICENSE.txt', Content .. Name .. ';' .. IDLicense .. ';' .. tostring(UTC) .. ';' .. Reason .. ';' .. BanDuration .. '\n')
-				end
-				if IDSteam ~= nil then
-					local Content = DTF_Load('BannedPlayer', 'STEAM.txt')
-					DTF_Save('BannedPlayer', 'STEAM.txt', Content .. Name .. ';' .. IDSteam .. ';' .. tostring(UTC) .. ';' .. Reason .. ';' .. BanDuration .. '\n')
-				end
-				DropPlayer(ServerID, 'Banned! Reason: ' .. Reason)
-				print('>> Banned ' .. Name .. '\n>> Reason: ' .. Reason)
-				if SendBanToChat then
-					TriggerClientEvent('chatMessage', -1, 'DiscordToFiveM', {222, 199, 132}, 'Banned ' .. Name .. '\nReason: ' .. Reason)
-				end
-				if UsingDiscordBot then
-					TriggerEvent('DiscordBot:ToDiscord', 'Chat', 'DiscordToFiveM', 'Banned ' .. Name .. '\nReason: ' .. Reason, '', true)
-				end
-				Value = 'Banned'
 			end
 		end
 	end
@@ -87,78 +88,42 @@ SetHttpHandler(function(req, res)
 end)
 
 AddEventHandler('playerConnecting', function(playerName, setKickReason) --Checks if a Player is banned and kicks him if needed
-	local UTC = os.time(os.date('*t'))
-
-	local LICENSEContent = DTF_Load('BannedPlayer', 'LICENSE.txt')
-	if LICENSEContent ~= nil and LICENSEContent ~= '' then
-		local Splitted = stringsplit(LICENSEContent, '\n')
-		if #Splitted >= 1 then
-			for i, line in ipairs(Splitted) do
-				local lineSplitted = stringsplit(line, ';')
-				local BanName = lineSplitted[1]
-				local BanID = lineSplitted[2]
-				local BanTimeThen = tonumber(lineSplitted[3])
-				local BanReason = lineSplitted[4]
-				local BanDuration = tonumber(lineSplitted[5])
-				if BanID == GetIDFromSource('license', source) then
-					if BanDuration == 0 then
-						setKickReason('You are banned forever! Reason: ' .. BanReason)
-						CancelEvent()
-					else
-						local Duration = BanDuration * 3600
-						local PassedTime = UTC - BanTimeThen
-						if PassedTime > Duration then
-							DTF_Save('BannedPlayer', 'LICENSE.txt', LICENSEContent:gsub(line .. '\n', ''))
-						else
-							local Remaining
-							if math.floor(Duration - PassedTime) < 60 then
-								Remaining = math.floor(Duration - PassedTime) .. ' Seconds'
-							elseif round((math.floor(Duration - PassedTime) / 60), 1) < 60 then
-								Remaining = round((math.floor(Duration - PassedTime) / 60), 1) .. ' Minutes'
-							else
-								Remaining = round((round((math.floor(Duration - PassedTime) / 60), 1) / 60), 1) .. ' Hours'
-							end
-							setKickReason('You are still banned for ' .. Remaining .. '! Reason: ' .. BanReason)
+	for i, IdentifierUsed in ipairs(IdentifiersUsed) do
+		local UTC = os.time(os.date('*t'))
+		local Content = DTF_Load('BannedPlayer', IdentifierUsed:upper() .. '.txt')
+		if Content ~= nil and Content ~= '' then
+			local Splitted = stringsplit(Content, '\n')
+			if #Splitted >= 1 then
+				for i, line in ipairs(Splitted) do
+					local lineSplitted = stringsplit(line, ';')
+					local BanName = lineSplitted[1]
+					local BanID = lineSplitted[2]
+					local BanTimeThen = tonumber(lineSplitted[3])
+					local BanReason = lineSplitted[4]
+					local BanDuration = tonumber(lineSplitted[5])
+					if BanID == GetIDFromSource(IdentifierUsed, source) then
+						if BanDuration == 0 then
+							setKickReason('You are banned forever! Reason: ' .. BanReason)
 							CancelEvent()
 							return
-						end
-					end
-				end
-			end
-		end
-	end
-	
-	local STEAMContent = DTF_Load('BannedPlayer', 'STEAM.txt')
-	if STEAMContent ~= nil and STEAMContent ~= '' then
-		local Splitted = stringsplit(STEAMContent, '\n')
-		if #Splitted >= 1 then
-			for i, line in ipairs(Splitted) do
-				local lineSplitted = stringsplit(line, ';')
-				local BanName = lineSplitted[1]
-				local BanID = lineSplitted[2]
-				local BanTimeThen = tonumber(lineSplitted[3])
-				local BanReason = lineSplitted[4]
-				local BanDuration = tonumber(lineSplitted[5])
-				if BanID == GetIDFromSource('steam', source) then
-					if BanDuration == 0 then
-						setKickReason('You are banned forever! Reason: ' .. BanReason)
-						CancelEvent()
-					else
-						local Duration = BanDuration * 3600
-						local PassedTime = UTC - BanTimeThen
-						if PassedTime > Duration then
-							DTF_Save('BannedPlayer', 'STEAM.txt', STEAMContent:gsub(line .. '\n', ''))
 						else
-							local Remaining
-							if math.floor(Duration - PassedTime) < 60 then
-								Remaining = math.floor(Duration - PassedTime) .. ' Seconds'
-							elseif round((math.floor(Duration - PassedTime) / 60), 1) < 60 then
-								Remaining = round((math.floor(Duration - PassedTime) / 60), 1) .. ' Minutes'
+							local Duration = BanDuration * 3600
+							local PassedTime = UTC - BanTimeThen
+							if PassedTime > Duration then
+								DTF_Save('BannedPlayer', IdentifierUsed:upper() .. '.txt', Content:gsub(line .. '\n', ''))
 							else
-								Remaining = round((round((math.floor(Duration - PassedTime) / 60), 1) / 60), 1) .. ' Hours'
+								local Remaining
+								if math.floor(Duration - PassedTime) < 60 then
+									Remaining = math.floor(Duration - PassedTime) .. ' Seconds'
+								elseif round((math.floor(Duration - PassedTime) / 60), 1) < 60 then
+									Remaining = round((math.floor(Duration - PassedTime) / 60), 1) .. ' Minutes'
+								else
+									Remaining = round((round((math.floor(Duration - PassedTime) / 60), 1) / 60), 1) .. ' Hours'
+								end
+								setKickReason('You are still banned for ' .. Remaining .. '! Reason: ' .. BanReason)
+								CancelEvent()
+								return
 							end
-							setKickReason('You are still banned for ' .. Remaining .. '! Reason: ' .. BanReason)
-							CancelEvent()
 						end
 					end
 				end
@@ -224,14 +189,14 @@ function GetIDFromSource(Type, ID) --(Thanks To WolfKnight [forum.FiveM.net])
 end
 
 -- Version Checking down here, better don't touch this
-local CurrentVersion = '1.1.0'
+local CurrentVersion = '2.0.0'
 local GithubResourceName = 'DiscordToFiveMBot'
 
 PerformHttpRequest('https://raw.githubusercontent.com/Flatracer/FiveM_Resources/master/' .. GithubResourceName .. '/VERSION', function(Error, NewestVersion, Header)
 	PerformHttpRequest('https://raw.githubusercontent.com/Flatracer/FiveM_Resources/master/' .. GithubResourceName .. '/CHANGES', function(Error, Changes, Header)
 		print('\n')
 		print('##############')
-		print('## ' .. GithubResourceName)
+		print('## ' .. GetCurrentResourceName())
 		print('##')
 		print('## Current Version: ' .. CurrentVersion)
 		print('## Newest Version: ' .. NewestVersion)
