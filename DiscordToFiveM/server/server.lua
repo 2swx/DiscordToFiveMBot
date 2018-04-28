@@ -1,4 +1,4 @@
-	local IdentifiersUsed = {'license', 'steam'}
+local IdentifiersUsed = {'license', 'steam'}
 
 -- Registers a HTTP request and handles it
 SetHttpHandler(function(req, res)
@@ -112,15 +112,13 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason) --Checks
 							if PassedTime > Duration then
 								DTF_Save('BannedPlayer', IdentifierUsed:upper() .. '.txt', Content:gsub(line .. '\n', ''))
 							else
-								local Remaining
-								if math.floor(Duration - PassedTime) < 60 then
-									Remaining = math.floor(Duration - PassedTime) .. ' Seconds'
-								elseif round((math.floor(Duration - PassedTime) / 60), 1) < 60 then
-									Remaining = round((math.floor(Duration - PassedTime) / 60), 1) .. ' Minutes'
+								local Remaining, RemainingString = math.floor(Duration - PassedTime), ' Seconds'
+								if round((Remaining / 60), 1) < 60 then
+									Remaining, RemainingString = round((Remaining / 60), 1), ' Minutes'
 								else
-									Remaining = round((round((math.floor(Duration - PassedTime) / 60), 1) / 60), 1) .. ' Hours'
+									Remaining, RemainingString = round((round((Remaining / 60), 1) / 60), 1), ' Hours'
 								end
-								setKickReason('You are still banned for ' .. Remaining .. '! Reason: ' .. BanReason)
+								setKickReason('You are still banned for ' .. Remaining .. RemainingString .. '! Reason: ' .. BanReason)
 								CancelEvent()
 								return
 							end
