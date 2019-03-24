@@ -1,0 +1,47 @@
+{
+	"CommandList" : "Command list",
+
+	"cmdlistDesc" : "Shows a list of commands",
+	"chkconDesc" : "Checks if the connection to the FiveM Server was successful",
+	"sendDesc" : "Sends a chat message to the FiveM server",
+	"getclientsDesc" : "Gets the connected clients of the FiveM Server",
+	"kickDesc" : "Kicks a client from the FiveM server",
+	"banDesc" : "Bans a client from the FiveM server",
+	
+	"serverlistDesc" : "Shows a list of the available server",
+	
+	"AvailableServer" : "Available server",
+
+	"chkconSuccessful" : "Connection successfull",
+	"chkconUnsuccessful" : "Connection unsuccessful",
+
+	"sendNoMessage" : "Please enter a message!",
+	"sendMessageSent" : "Message sent to",
+	"sendError" : "ERROR!\nCouldn't send the message to",
+
+	"getclientsConnectedClients" : "These are the connected Clients",
+	"getclientsNoClients" : "Seems like there are no clients...",
+
+	"kickKicked" : "Done! The Client is kicked!",
+
+	"banBanned" : "Done! The Client is banned!",
+
+	"kickbanElse" : "Hmm, seems like there is no Client with this ID...",
+	"kickbanNoServerID" : "Please enter a server ID!",
+	"kickbanNoReason" : "Please add a reason after the server ID!",
+	
+	"kickLogKicked" : "kicked",
+	"banLogBanned" : "banned",
+	"kickbanLogReason" : "Reason",
+	"banLogBannedDuration" : "Duration",
+	"banLogBannedHours" : "Hour[s]",
+	"banLogBannedForever" : "Forever",
+
+	"SpecifiedServerNotAvailable" : "Specified server not available!",
+	"NoServerSpecified" : "Please specify a server!",
+	
+	"purgeNoNumber" : "Please provide a number between 2 and 200 for the number of messages to delete.",
+	"purgeError" : "ERROR"
+	
+	
+}
