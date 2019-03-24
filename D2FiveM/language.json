@@ -1,0 +1,52 @@
+{
+	"CommandList" : "Command list",
+
+	"cmdlistDesc" : "Shows this list of commands.",
+	"sendDesc" : "Sends a chat message to the FiveM server.",
+	"getclientsDesc" : "Get a list of all clients connected to the FiveM Server.",
+	"kickDesc" : "Kick a client from the FiveM server.",
+	"banDesc" : "Ban a client from the FiveM server.",
+	"resourcestopDesc" : "Stop a resource on the FiveM server.",
+	"resourcestartDesc" : "Start a resource on the FiveM server.",
+	"resourcerestartDesc" : "Restart a resource on the FiveM server.",
+	"resourcerefreshDesc" : "Refresh the resource list if some resources aren't detected by the FiveM server.",
+	"resourcelistDesc" : "Get a list of all available resources on the FiveM server.",
+	
+	"sendNoMessage" : "Please enter a message!",
+	"sendMessageSent" : "Message sent!",
+	"sendError" : "ERROR!\nCouldn't send the message!",
+
+	"getclientsConnectedClients" : "These are the connected Clients:",
+	"getclientsNoClients" : "Seems like there are no clients...",
+
+	"kickKicked" : "Command executed! The Client is kicked!",
+
+	"banBanned" : "Command executed! The Client is banned!",
+
+	"kickbanElse" : "Hmm, seems like there is no Client with this ID...",
+	"kickbanNoServerID" : "Please enter a server ID!",
+	"kickbanNoReason" : "Please add a reason after the server ID!",
+	
+	"kickLogKicked" : "kicked",
+	"banLogBanned" : "banned",
+	"kickbanLogReason" : "Reason",
+	"banLogBannedDuration" : "Duration",
+	"banLogBannedHours" : "Hour[s]",
+	"banLogBannedForever" : "Forever",
+	
+	"resourcestopStopped" : "Command executed! The resource is stopped.",
+	"resourcestartStarted" : "Command executed! The resource is started.",
+	"resourcerestartRestarted" : "Command executed! The resource is restarted.",
+	"resourcerefreshRefreshed" : "Command executed! The resource list should be refreshed.",
+	"resourceNoSpace" : "ERROR!\nThe resource name can't contain spaces.",
+	"resourceError" : "ERROR!",
+	
+	"commandNoArgs" : "ERROR!\nThis command doesn't take any arguments.",
+	
+	"Kicked" : "Kicked",
+	"Banned" : "Banned",
+	"Reason" : "Reason",
+	"Duration" : "Duration",
+	"Hours" : "Hour[s]",
+	"Forever" : "Forever"
+}

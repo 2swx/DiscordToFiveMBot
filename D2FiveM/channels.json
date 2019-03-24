@@ -1,0 +1,143 @@
+{
+	"cmdlistChannel" : {
+		"first" : "420281620210384897",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"cmdlistReturnChannel" : {
+		"first" : "420281620210384897",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"sendChannel" : {
+		"first" : "420275724977700874",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"sendReturnChannel" : {
+		"first" : "420310332297445384",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"getclientsChannel" : {
+		"first" : "420275676231499777",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"getclientsReturnChannel" : {
+		"first" : "420275676231499777",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"kickChannel" : {
+		"first" : "420275768300535811",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"kickReturnChannel" : {
+		"first" : "420275768300535811",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"banChannel" : {
+		"first" : "420275797832499202",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"banReturnChannel" : {
+		"first" : "420275797832499202",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"resourcestopChannel" : {
+		"first" : "554714210291023882",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"resourcestopReturnChannel" : {
+		"first" : "554714210291023882",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"resourcestartChannel" : {
+		"first" : "554714210291023882",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"resourcestartReturnChannel" : {
+		"first" : "554714210291023882",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"resourcerestartChannel" : {
+		"first" : "554714210291023882",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"resourcerestartReturnChannel" : {
+		"first" : "554714210291023882",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"resourcerefreshChannel" : {
+		"first" : "554714210291023882",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"resourcerefreshReturnChannel" : {
+		"first" : "554714210291023882",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"resourcelistChannel" : {
+		"first" : "554714210291023882",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"resourcelistReturnChannel" : {
+		"first" : "554714210291023882",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"kickbanLogChannel" : "420311609538248715"
+}
