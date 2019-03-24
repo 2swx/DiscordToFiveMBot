@@ -1,0 +1,8 @@
+{
+	"token"  : "YOUR_TOKEN_HERE",
+	"prefix"  : "!!",
+	"UsingDiscordBot"  : true,
+	"SendKickToChat"  : false,
+	"SendBanToChat"  : false,
+	"BanDuration"  : 0.025
+}

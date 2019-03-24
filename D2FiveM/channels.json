@@ -1,0 +1,143 @@
+{
+	"cmdlistChannel" : {
+		"first" : "YOUR_CHANNEL_ID_HERE",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"cmdlistReturnChannel" : {
+		"first" : "YOUR_CHANNEL_ID_HERE",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"sendChannel" : {
+		"first" : "YOUR_CHANNEL_ID_HERE",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"sendReturnChannel" : {
+		"first" : "YOUR_CHANNEL_ID_HERE",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"getclientsChannel" : {
+		"first" : "YOUR_CHANNEL_ID_HERE",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"getclientsReturnChannel" : {
+		"first" : "YOUR_CHANNEL_ID_HERE",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"kickChannel" : {
+		"first" : "YOUR_CHANNEL_ID_HERE",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"kickReturnChannel" : {
+		"first" : "YOUR_CHANNEL_ID_HERE",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"banChannel" : {
+		"first" : "YOUR_CHANNEL_ID_HERE",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"banReturnChannel" : {
+		"first" : "YOUR_CHANNEL_ID_HERE",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"resourcestopChannel" : {
+		"first" : "YOUR_CHANNEL_ID_HERE",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"resourcestopReturnChannel" : {
+		"first" : "YOUR_CHANNEL_ID_HERE",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"resourcestartChannel" : {
+		"first" : "YOUR_CHANNEL_ID_HERE",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"resourcestartReturnChannel" : {
+		"first" : "YOUR_CHANNEL_ID_HERE",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"resourcerestartChannel" : {
+		"first" : "YOUR_CHANNEL_ID_HERE",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"resourcerestartReturnChannel" : {
+		"first" : "YOUR_CHANNEL_ID_HERE",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"resourcerefreshChannel" : {
+		"first" : "YOUR_CHANNEL_ID_HERE",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"resourcerefreshReturnChannel" : {
+		"first" : "YOUR_CHANNEL_ID_HERE",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"resourcelistChannel" : {
+		"first" : "YOUR_CHANNEL_ID_HERE",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"resourcelistReturnChannel" : {
+		"first" : "YOUR_CHANNEL_ID_HERE",
+		"second" : "",
+		"third" : "",
+		"fourth" : ""
+	},
+	
+	"kickbanLogChannel" : "YOUR_CHANNEL_ID_HERE"
+}
